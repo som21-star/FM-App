@@ -1,0 +1,202 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Classic FM – Black & White theme (monochrome, vintage radio feel) */
+
+@layer base {
+  :root {
+    /* True white background */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 4%;
+
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 4%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 4%;
+
+    /* Monochrome primary (near black) and foreground (white) */
+    --primary: 0 0% 4%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 20%;
+
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+
+    --accent: 0 0% 20%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 0 0% 20%;
+
+    --radius: 0.75rem;
+
+    /* Monochrome glow tokens */
+    --gold: 0 0% 20%;
+    --gold-dim: 0 0% 40%;
+    --gold-bright: 0 0% 10%;
+    --silver: 0 0% 30%;
+    --surface-elevated: 0 0% 96%;
+
+    /* Region accent colors – keep subtle but desaturated */
+    --india-saffron: 24 60% 55%;
+    --india-green: 120 40% 30%;
+    --us-blue: 217 30% 50%;
+    --europe-gold: 45 30% 50%;
+    --australia-teal: 174 30% 50%;
+    --south-america-emerald: 145 30% 42%;
+    --africa-orange: 25 40% 53%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 4%;
+    --sidebar-primary: 0 0% 4%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 90%;
+    --sidebar-accent-foreground: 0 0% 4%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 0 0% 20%;
+  }
+
+  .dark {
+    --background: 0 0% 4%;
+    --foreground: 0 0% 96%;
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 96%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 96%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 4%;
+    --secondary: 0 0% 13%;
+    --secondary-foreground: 0 0% 80%;
+    --muted: 0 0% 16%;
+    --muted-foreground: 0 0% 50%;
+    --accent: 0 0% 85%;
+    --accent-foreground: 0 0% 6%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 16%;
+    --input: 0 0% 16%;
+    --ring: 0 0% 70%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    @apply bg-card/90 backdrop-blur-xl border border-border/60;
+  }
+
+  /* Subtle white/grey glow */
+  .glow-primary {
+    box-shadow: 0 0 12px hsl(var(--primary) / 0.12), 0 0 28px hsl(var(--primary) / 0.06);
+  }
+
+  .glow-primary-intense {
+    box-shadow: 0 0 22px hsl(var(--primary) / 0.28), 0 0 48px hsl(var(--primary) / 0.12);
+  }
+
+  /* Vivid gradient text – teal→cyan→blue (works on both light & dark) */
+  .text-gradient-primary {
+    background: linear-gradient(135deg, hsl(170 80% 45%), hsl(190 90% 50%), hsl(220 85% 55%));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* White/grey gradient text */
+  .text-gradient-silver {
+    background: linear-gradient(135deg, hsl(0 0% 100%), hsl(0 0% 75%));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .bg-gradient-primary {
+    background: linear-gradient(135deg, hsl(0 0% 100%), hsl(0 0% 85%), hsl(0 0% 70%));
+  }
+
+  /* Subtle grid texture for hero */
+  .bg-grid-texture {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+
+    0%,
+    100% {
+      box-shadow: 0 0 10px hsl(var(--primary) / 0.18);
+    }
+
+    50% {
+      box-shadow: 0 0 28px hsl(var(--primary) / 0.32);
+    }
+  }
+
+  .animate-radio-wave {
+    animation: radio-wave 1.5s ease-in-out infinite;
+  }
+
+  @keyframes radio-wave {
+
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    50% {
+      transform: scale(1.1);
+      opacity: 0.8;
+    }
+  }
+
+  /* Accent bar (monochrome) */
+  .gold-bar {
+    background: linear-gradient(90deg, transparent, hsl(var(--primary)), transparent);
+    height: 1px;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
