@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
+import { supabase } from '@/lib/supabase';
 
 const freeFeatures = [
   'Basic waveforms only',
@@ -30,32 +31,23 @@ const premiumFeatures = [
 const plans = [
   {
     id: 'free',
-    name: 'Free',
-    price: '$0',
+    name: 'Basic',
+    price: 'Free',
     period: 'forever',
-    annualEquiv: 'Basic access',
+    annualEquiv: 'Essential features',
     popular: false,
     cta: 'Current Plan',
   },
   {
-    id: 'monthly',
-    name: 'Premium Monthly',
-    price: '$1.99',
-    period: 'per month',
-    annualEquiv: null,
-    popular: false,
-    cta: 'Start 1.99 USD/month',
-  },
-  {
-    id: 'yearly',
-    name: 'Premium Annual',
-    price: '$15.00',
-    period: 'per year',
-    annualEquiv: '$1.25/mo',
+    id: 'premium_free',
+    name: 'Early Bird Premium',
+    price: 'Free',
+    period: 'for 60 days',
+    annualEquiv: 'Limited time offer',
     popular: true,
-    savings: 'Save 37%',
-    cta: 'Save 37% - 15 USD/year',
-  },
+    savings: '100% OFF',
+    cta: 'Activate Free Access',
+  }
 ];
 
 const regions = [
@@ -81,48 +73,19 @@ export default function Premium() {
     setIsCheckingOut(true);
 
     try {
-      // 1. Stripe Integration
-      // In a real production app, you would call a backend to create a Checkout Session.
-      // For this demo/integration, we use the Stripe.js redirect or a Payment Link.
-      const stripe = (window as any).Stripe?.('pk_test_51BTjS5CHC3t9t9t9t9t9t9t9t'); // REPLACE with your actual pk_test key
+      console.log(`Activating Free Premium for ${planId}...`);
 
-      if (stripe) {
-        // If you have Stripe Payment Links, you can just redirect:
-        // window.location.href = planId === 'monthly' ? 'https://buy.stripe.com/test_...' : 'https://buy.stripe.com/test_...';
+      const { error } = await supabase.auth.updateUser({
+        data: { is_premium: true }
+      });
 
-        console.log(`Redirecting to Stripe for ${planId}...`);
-        // For standard Checkout, usually you'd fetch a sessionId from your Edge Function:
-        // const { data } = await supabase.functions.invoke('create-checkout-session', { body: { planId } });
-        // await stripe.redirectToCheckout({ sessionId: data.id });
+      if (error) throw error;
 
-        alert("Stripe Redirect: In a full setup, this would open Stripe Checkout. Please ensure your Stripe Public Key is set in the code.");
-      }
-
-      // 2. Razorpay Fallback (INR)
-      if (planId === 'monthly' || planId === 'yearly') {
-        const amount = planId === 'monthly' ? 159 : 1199; // INR prices
-        const options = {
-          key: "rzp_test_placeholder", // REPLACE with your Razorpay Key ID
-          amount: amount * 100,
-          currency: "INR",
-          name: "Frequency House",
-          description: `${planId === 'monthly' ? 'Monthly' : 'Annual'} Subscription`,
-          handler: function (response: any) {
-            alert(`Payment Successful! ID: ${response.razorpay_payment_id}. Refresh the app.`);
-            // In a real app, verify payment on your backend/webhook
-          },
-          prefill: {
-            email: user.email,
-          },
-          theme: {
-            color: "#f59e0b",
-          },
-        };
-        const rzp = new (window as any).Razorpay(options);
-        rzp.open();
-      }
+      alert("Premium access activated! Enjoy full features for the next 60 days.");
+      window.location.reload();
     } catch (err) {
-      console.error("Payment error:", err);
+      console.error("Activation error:", err);
+      alert("Failed to activate Premium. Please try again.");
     } finally {
       setIsCheckingOut(false);
     }
@@ -162,7 +125,7 @@ export default function Premium() {
               <span className="text-gradient-primary">Unleashed</span>
             </h1>
             <p className="text-sm text-muted-foreground max-w-xs mx-auto">
-              No ads. HD audio. Every region on Earth. 7-day free trial included.
+              No ads. HD audio. Every region on Earth. <b>Free for first 60 days</b> - no card details required!
             </p>
           </motion.div>
         </div>
@@ -238,7 +201,7 @@ export default function Premium() {
           </div>
 
           <p className="text-center text-[11px] text-muted-foreground mt-3">
-            ✓ Cancel anytime &nbsp;·&nbsp; ✓ 7-day free trial &nbsp;·&nbsp; ✓ Secure payment
+            ✓ Cancel anytime &nbsp;·&nbsp; ✓ Free for first 60 days &nbsp;·&nbsp; ✓ No card required
           </p>
         </motion.section>
 
@@ -364,15 +327,15 @@ export default function Premium() {
             <div className="p-5 text-center">
               <Crown className="w-8 h-8 text-primary mx-auto mb-2" />
               <h3 className="font-display text-base font-bold text-foreground mb-1">Upgrade to Premium</h3>
-              <p className="text-xs text-muted-foreground mb-4">Unlock unlimited waveforms, export HD & priority access</p>
+              <p className="text-xs text-muted-foreground mb-4">Enjoy full premium access during our infrastructure launch phase.</p>
               <Button
                 className="w-full glow-primary font-semibold"
-                onClick={() => handleCheckout('yearly')}
+                onClick={() => handleCheckout('premium_free')}
                 disabled={isCheckingOut}
               >
-                {isCheckingOut ? 'Loading...' : 'Get Premium – Save 37%'}
+                {isCheckingOut ? 'Activating...' : 'Get Free Premium Access'}
               </Button>
-              <p className="text-[10px] text-muted-foreground mt-2.5">Stripe and Razorpay supported</p>
+              <p className="text-[10px] text-muted-foreground mt-2.5">Limited time offer: Free for first 60 days</p>
             </div>
           </div>
         </motion.div>
