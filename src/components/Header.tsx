@@ -98,6 +98,19 @@ export function Header() {
               </Link>
             )}
             <ThemeToggle />
+
+            {/* Profile link when signed in */}
+            {user ? (
+              <Link to="/profile" className="hidden sm:flex items-center gap-2 px-2 py-1 rounded-full hover:bg-secondary transition">
+                {user.user_metadata?.avatar_base64 || user.user_metadata?.avatar_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={user.user_metadata?.avatar_base64 || user.user_metadata?.avatar_url} alt={user.user_metadata?.display_name || user.email || 'profile'} className="w-8 h-8 rounded-full object-cover" />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-xs text-muted-foreground">{(user.user_metadata?.display_name || user.email || 'U').charAt(0).toUpperCase()}</div>
+                )}
+              </Link>
+            ) : null}
+
             <AuthDialog />
           </div>
         </div>

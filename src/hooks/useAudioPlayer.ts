@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
 import { RadioStation } from '@/types/radio';
 
 interface AudioPlayerState {
@@ -74,6 +75,29 @@ export function useAudioPlayer() {
         error: 'Failed to play station' 
       }));
     });
+
+    // Record listen counts in localStorage (per-user if available)
+    try {
+      supabase.auth.getUser().then(({ data }) => {
+        const uid = data.user?.id || 'anon';
+        try {
+          const key = `fh_listens:${uid}`;
+          const raw = localStorage.getItem(key) || localStorage.getItem('fh_listens:anon');
+          const parsed = raw ? JSON.parse(raw) : {};
+          const entry = parsed[station.id] || { id: station.id, name: station.name, count: 0, last: 0 };
+          entry.count = (entry.count || 0) + 1;
+          entry.last = Date.now();
+          parsed[station.id] = entry;
+          localStorage.setItem(key, JSON.stringify(parsed));
+        } catch (err) {
+          console.warn('Failed to record listen', err);
+        }
+      }).catch(() => {
+        // ignore
+      });
+    } catch (err) {
+      // ignore
+    }
   }, []);
 
   const pause = useCallback(() => {
