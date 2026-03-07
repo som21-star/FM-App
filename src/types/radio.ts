@@ -62,6 +62,20 @@ export const CURATED_STATIONS: Record<string, { searchName: string; displayName:
     { searchName: 'Capital FM', displayName: 'Capital FM Kenya' },
     { searchName: 'YFM', displayName: 'YFM Johannesburg' },
   ],
+  asiapacific: [
+    { searchName: 'J-Wave', displayName: 'J-Wave Tokyo' },
+    { searchName: 'KBS', displayName: 'KBS Radio Korea' },
+    { searchName: 'Radio Taiwan', displayName: 'Radio Taiwan International' },
+    { searchName: 'NHK', displayName: 'NHK Radio Japan' },
+    { searchName: 'CNA', displayName: 'CNA Singapore' },
+  ],
+  middleeast: [
+    { searchName: 'Dubai Eye', displayName: 'Dubai Eye 103.8' },
+    { searchName: 'Radio Jordan', displayName: 'Radio Jordan' },
+    { searchName: 'MBC FM', displayName: 'MBC FM' },
+    { searchName: 'Nile FM', displayName: 'Nile FM Egypt' },
+    { searchName: 'Virgin Radio', displayName: 'Virgin Radio Dubai' },
+  ],
 };
 
 export interface Region {
@@ -71,6 +85,7 @@ export interface Region {
   countries: string[];
   accent: string;
   gradient: string;
+  premium?: boolean;
 }
 
 export const REGIONS: Region[] = [
@@ -105,6 +120,7 @@ export const REGIONS: Region[] = [
     countries: ['AU', 'NZ'],
     accent: 'australia-teal',
     gradient: 'from-teal-500 to-yellow-500',
+    premium: true,
   },
   {
     id: 'southamerica',
@@ -113,6 +129,7 @@ export const REGIONS: Region[] = [
     countries: ['BR', 'AR', 'CL', 'CO', 'PE', 'VE'],
     accent: 'southamerica-emerald',
     gradient: 'from-emerald-500 to-yellow-400',
+    premium: true,
   },
   {
     id: 'africa',
@@ -121,5 +138,24 @@ export const REGIONS: Region[] = [
     countries: ['ZA', 'NG', 'KE', 'EG', 'MA', 'GH'],
     accent: 'africa-orange',
     gradient: 'from-orange-600 to-yellow-500',
+    premium: true,
+  },
+  {
+    id: 'asiapacific',
+    name: 'Asia Pacific',
+    emoji: '🌏',
+    countries: ['JP', 'KR', 'TW', 'SG', 'TH', 'VN'],
+    accent: 'asia-red',
+    gradient: 'from-red-500 to-pink-500',
+    premium: true,
+  },
+  {
+    id: 'middleeast',
+    name: 'Middle East',
+    emoji: '🇦🇪',
+    countries: ['AE', 'SA', 'JO', 'EG', 'QA'],
+    accent: 'middleeast-gold',
+    gradient: 'from-amber-500 to-yellow-500',
+    premium: true,
   },
 ];

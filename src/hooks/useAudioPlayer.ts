@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { RadioStation } from '@/types/radio';
+import { toast } from 'sonner';
 
 interface AudioPlayerState {
   currentStation: RadioStation | null;
@@ -38,13 +39,18 @@ export function useAudioPlayer() {
       setState(prev => ({ ...prev, isLoading: true }));
     });
 
-    audio.addEventListener('error', () => {
+    audio.addEventListener('error', (e) => {
+      console.error('Audio error:', e);
+      const errorMsg = 'Failed to play station. It might be offline.';
       setState(prev => ({ 
         ...prev, 
         isPlaying: false, 
         isLoading: false, 
-        error: 'Failed to play station' 
+        error: errorMsg
       }));
+      toast.error('Playback failed', {
+        description: errorMsg
+      });
     });
 
     return () => {
@@ -65,15 +71,34 @@ export function useAudioPlayer() {
 
     // Use url_resolved for the actual stream, fallback to url
     const streamUrl = station.url_resolved || station.url;
-    audioRef.current.src = streamUrl;
-    audioRef.current.play().catch((e) => {
-      console.error('Playback failed:', e);
+    
+    // Validate URL
+    if (!streamUrl || streamUrl === '') {
+      toast.error('Invalid station URL', {
+        description: 'This station is not available'
+      });
       setState(prev => ({ 
         ...prev, 
         isPlaying: false, 
         isLoading: false, 
-        error: 'Failed to play station' 
+        error: 'Invalid URL' 
       }));
+      return;
+    }
+
+    audioRef.current.src = streamUrl;
+    audioRef.current.play().catch((e) => {
+      console.error('Playback failed:', e);
+      const errorMsg = 'Failed to play station. It might be offline or blocked.';
+      setState(prev => ({ 
+        ...prev, 
+        isPlaying: false, 
+        isLoading: false, 
+        error: errorMsg
+      }));
+      toast.error('Playback failed', {
+        description: errorMsg
+      });
     });
 
     // Record listen counts in localStorage (per-user if available)

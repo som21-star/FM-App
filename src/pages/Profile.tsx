@@ -3,10 +3,18 @@ import { Header } from '@/components/Header';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { User, Mail, Phone, MapPin, Calendar, LogOut } from 'lucide-react';
 
 export default function Profile() {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const [displayName, setDisplayName] = useState<string>('');
+  const [customerName, setCustomerName] = useState<string>('');
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [location, setLocation] = useState<string>('');
+  const [bio, setBio] = useState<string>('');
   const [avatarData, setAvatarData] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [listens, setListens] = useState<Record<string, any>>({});
@@ -15,6 +23,10 @@ export default function Profile() {
     if (!user) return;
     const md = (user.user_metadata ?? {}) as any;
     setDisplayName(md.display_name || '');
+    setCustomerName(md.customer_name || '');
+    setPhoneNumber(md.phone_number || '');
+    setLocation(md.location || '');
+    setBio(md.bio || '');
     setAvatarData(md.avatar_base64 || md.avatar_url || null);
 
     // Load listens from localStorage
@@ -41,9 +53,18 @@ export default function Profile() {
     if (!user) return alert('Sign in to update profile');
     setLoading(true);
     try {
-      const { error } = await supabase.auth.updateUser({ data: { display_name: displayName, avatar_base64: avatarData } });
+      const { error } = await supabase.auth.updateUser({ 
+        data: { 
+          display_name: displayName, 
+          customer_name: customerName,
+          phone_number: phoneNumber,
+          location: location,
+          bio: bio,
+          avatar_base64: avatarData 
+        } 
+      });
       if (error) throw error;
-      alert('Profile updated');
+      alert('Profile updated successfully!');
     } catch (err: any) {
       console.error(err);
       alert(err?.message || 'Failed to update profile');
@@ -59,50 +80,187 @@ export default function Profile() {
   return (
     <div className="min-h-screen bg-background pb-28">
       <Header />
-      <main className="max-w-2xl mx-auto px-4 py-8">
-        <h1 className="font-display text-2xl font-bold text-foreground mb-4">Profile</h1>
+      <main className="relative z-10 max-w-4xl mx-auto px-4 py-8">
+        <h1 className="font-display text-3xl font-bold text-foreground mb-2">Profile</h1>
+        <p className="text-sm text-muted-foreground mb-6">Manage your account information and preferences</p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-start">
-          <div className="col-span-1">
-            <div className="rounded-lg border border-border p-4 bg-card">
-              <div className="w-32 h-32 rounded-md overflow-hidden bg-secondary mb-3">
-                {avatarData ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={avatarData} alt="avatar" className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-muted-foreground">No image</div>
-                )}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Column - Avatar */}
+          <div className="lg:col-span-1">
+            <div className="rounded-lg border border-border p-6 bg-card/95 backdrop-blur-sm sticky top-20">
+              <div className="flex flex-col items-center">
+                <div className="w-32 h-32 rounded-full overflow-hidden bg-secondary mb-4 ring-2 ring-border">
+                  {avatarData ? (
+                    <img src={avatarData} alt="avatar" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                      <User className="w-12 h-12" />
+                    </div>
+                  )}
+                </div>
+                <Label className="text-sm font-medium mb-2">Profile Picture</Label>
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={onFile} 
+                  className="text-xs text-muted-foreground file:mr-2 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-medium file:bg-secondary file:text-foreground hover:file:bg-secondary/80 cursor-pointer"
+                />
+                <p className="text-xs text-muted-foreground mt-2 text-center">JPG, PNG or GIF (max 2MB)</p>
               </div>
-              <label className="block text-xs text-muted-foreground mb-1">Upload avatar</label>
-              <input type="file" accept="image/*" onChange={onFile} />
+
+              {/* Account Info */}
+              <div className="mt-6 pt-6 border-t border-border space-y-3">
+                <div className="flex items-center gap-2 text-sm">
+                  <Mail className="w-4 h-4 text-muted-foreground" />
+                  <div>
+                    <div className="text-xs text-muted-foreground">Email</div>
+                    <div className="font-medium truncate">{user?.email || 'Not signed in'}</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <Calendar className="w-4 h-4 text-muted-foreground" />
+                  <div>
+                    <div className="text-xs text-muted-foreground">Member since</div>
+                    <div className="font-medium">
+                      {user?.created_at ? new Date(user.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'N/A'}
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Sign Out Button */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={signOut}
+                  className="w-full mt-4 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sign Out
+                </Button>
+              </div>
             </div>
           </div>
 
-          <div className="col-span-2">
-            <div className="rounded-lg border border-border p-4 bg-card">
-              <label className="block text-xs text-muted-foreground mb-1">Display name</label>
-              <input value={displayName} onChange={(e) => setDisplayName(e.target.value)} className="w-full px-3 py-2 rounded-md bg-transparent border border-border mb-3" />
-              <div className="flex gap-2">
-                <Button onClick={saveProfile} disabled={loading}>{loading ? 'Saving...' : 'Save Profile'}</Button>
-                <Button variant="ghost" onClick={() => { setDisplayName(''); setAvatarData(null); }}>Reset</Button>
+          {/* Right Column - Form Fields */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Personal Information */}
+            <div className="rounded-lg border border-border p-6 bg-card/95 backdrop-blur-sm">
+              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <User className="w-5 h-5" />
+                Personal Information
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="displayName" className="text-sm font-medium">Display Name</Label>
+                  <Input 
+                    id="displayName"
+                    value={displayName} 
+                    onChange={(e) => setDisplayName(e.target.value)} 
+                    placeholder="How you appear on the app"
+                    className="w-full"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="customerName" className="text-sm font-medium">Full Name</Label>
+                  <Input 
+                    id="customerName"
+                    value={customerName} 
+                    onChange={(e) => setCustomerName(e.target.value)} 
+                    placeholder="Your full legal name"
+                    className="w-full"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="phoneNumber" className="text-sm font-medium flex items-center gap-1">
+                    <Phone className="w-3 h-3" />
+                    Phone Number
+                  </Label>
+                  <Input 
+                    id="phoneNumber"
+                    value={phoneNumber} 
+                    onChange={(e) => setPhoneNumber(e.target.value)} 
+                    placeholder="+1 (555) 000-0000"
+                    type="tel"
+                    className="w-full"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="location" className="text-sm font-medium flex items-center gap-1">
+                    <MapPin className="w-3 h-3" />
+                    Location
+                  </Label>
+                  <Input 
+                    id="location"
+                    value={location} 
+                    onChange={(e) => setLocation(e.target.value)} 
+                    placeholder="City, Country"
+                    className="w-full"
+                  />
+                </div>
+              </div>
+              <div className="mt-4 space-y-2">
+                <Label htmlFor="bio" className="text-sm font-medium">Bio</Label>
+                <Textarea 
+                  id="bio"
+                  value={bio} 
+                  onChange={(e) => setBio(e.target.value)} 
+                  placeholder="Tell us a bit about yourself and your music taste..."
+                  className="w-full min-h-[100px] resize-none"
+                  maxLength={500}
+                />
+                <p className="text-xs text-muted-foreground text-right">{bio.length}/500</p>
               </div>
 
-              <hr className="my-4" />
+              <div className="flex gap-3 mt-6">
+                <Button onClick={saveProfile} disabled={loading} className="flex-1">
+                  {loading ? 'Saving...' : 'Save Changes'}
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => { 
+                    setDisplayName(''); 
+                    setCustomerName('');
+                    setPhoneNumber('');
+                    setLocation('');
+                    setBio('');
+                    setAvatarData(null); 
+                  }}
+                  disabled={loading}
+                >
+                  Reset
+                </Button>
+              </div>
+            </div>
 
-              <h3 className="text-sm font-semibold mb-2">Listening Trends</h3>
+            {/* Listening Trends */}
+            <div className="rounded-lg border border-border p-6 bg-card/95 backdrop-blur-sm">
+              <h2 className="text-lg font-semibold mb-4">Listening Trends</h2>
               {topListens.length === 0 ? (
-                <p className="text-xs text-muted-foreground">No listens yet — play stations to build trends.</p>
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 rounded-full bg-secondary mx-auto mb-3 flex items-center justify-center">
+                    <User className="w-8 h-8 text-muted-foreground" />
+                  </div>
+                  <p className="text-sm text-muted-foreground">No listens yet</p>
+                  <p className="text-xs text-muted-foreground mt-1">Start playing stations to build your trends</p>
+                </div>
               ) : (
-                <ul className="space-y-2">
+                <div className="space-y-3">
                   {topListens.map((l: any, i: number) => (
-                    <li key={i} className="flex items-center justify-between">
-                      <div className="min-w-0">
-                        <div className="text-sm font-medium text-foreground truncate">{l.name}</div>
-                        <div className="text-[11px] text-muted-foreground">{l.count} plays · last {new Date(l.last || 0).toLocaleString()}</div>
+                    <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-bold text-muted-foreground w-6">#{i + 1}</span>
+                          <div className="min-w-0">
+                            <div className="text-sm font-medium text-foreground truncate">{l.name}</div>
+                            <div className="text-xs text-muted-foreground">
+                              {l.count} {l.count === 1 ? 'play' : 'plays'} · Last played {new Date(l.last || 0).toLocaleDateString()}
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </li>
+                    </div>
                   ))}
-                </ul>
+                </div>
               )}
             </div>
           </div>

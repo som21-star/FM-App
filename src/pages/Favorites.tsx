@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion';
-import { Heart, Radio } from 'lucide-react';
+import { Heart, Radio, Crown } from 'lucide-react';
 import { usePlayer } from '@/contexts/PlayerContext';
 import { StationCard } from '@/components/StationCard';
 import { Header } from '@/components/Header';
 import { AudioPlayer } from '@/components/AudioPlayer';
+import { Link } from 'react-router-dom';
 
 export default function Favorites() {
-  const { favorites } = usePlayer();
+  const { favorites, isPremium, favoritesLimit, favoritesRemaining } = usePlayer();
 
   return (
     <div className="min-h-screen bg-background pb-28">
@@ -23,9 +24,39 @@ export default function Favorites() {
             <Heart className="w-4 h-4 text-red-500" />
             <span className="text-[10px] font-semibold text-primary uppercase tracking-widest">Saved</span>
           </div>
-          <h1 className="font-display text-2xl font-bold text-foreground">My Stations</h1>
+          <div className="flex items-center justify-between">
+            <h1 className="font-display text-2xl font-bold text-foreground">My Stations</h1>
+            {!isPremium && (
+              <div className="text-xs text-muted-foreground">
+                {favorites.length}/{favoritesLimit} saved
+              </div>
+            )}
+          </div>
           <div className="gold-bar mt-3 w-16" />
         </motion.div>
+
+        {/* Favorites Limit Warning for Free Users */}
+        {!isPremium && favorites.length >= favoritesLimit - 1 && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20"
+          >
+            <div className="flex items-start gap-2">
+              <Crown className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="text-xs text-foreground font-medium">
+                  {favoritesRemaining === 0 
+                    ? 'Favorites limit reached!' 
+                    : `Only ${favoritesRemaining} favorite slot remaining`}
+                </p>
+                <p className="text-[11px] text-muted-foreground mt-0.5">
+                  <Link to="/premium" className="text-primary hover:underline">Upgrade to Pro</Link> for unlimited favorites
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
 
         {favorites.length > 0 ? (
           <motion.div

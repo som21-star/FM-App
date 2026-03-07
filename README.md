@@ -1,73 +1,210 @@
-# Welcome to your Lovable project
+# Frequency House - Your Home of Radio 📻
 
-## Project info
+A modern, sleek web application for streaming live radio stations from around the world. Built with React, TypeScript, and Supabase.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+![Frequency House](https://lovable.dev/opengraph-image-p98pqg.png)
 
-## How can I edit this code?
+## ✨ Features
 
-There are several ways of editing your application.
+- 🌍 **Global Coverage**: Stream stations from India, USA, Europe, Australia, South America & Africa
+- 🎵 **HD Audio**: Premium users get 320kbps high-quality streaming
+- ❤️ **Favorites**: Save your favorite stations for quick access
+- 👤 **User Profiles**: Personalized profiles with listening history
+- 🎨 **Beautiful UI**: Clean, monochrome design with smooth animations
+- 📱 **Responsive**: Works perfectly on desktop, tablet, and mobile
+- 🔐 **Secure Auth**: Email/password authentication via Supabase
+- 💎 **Premium Plans**: 60-day free trial, then $1/month or $12/year
 
-**Use Lovable**
+## 🚀 Quick Start
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+### Prerequisites
 
-Changes made via Lovable will be committed automatically to this repo.
+- Node.js 18+ and npm
+- Supabase account (free tier works)
 
-**Use your preferred IDE**
+### Installation
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+```bash
+# Clone the repository
+git clone https://github.com/som21-star/FM-App.git
+cd FM-App
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+# Install dependencies
+npm install
 
-Follow these steps:
+# Create .env file (copy from .env.example)
+cp .env.example .env
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Add your Supabase credentials to .env
+# VITE_SUPABASE_URL=your_supabase_url
+# VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The app will be available at `http://localhost:8080`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🛠️ Tech Stack
 
-**Use GitHub Codespaces**
+- **Frontend**: React 18, TypeScript, Vite
+- **Styling**: Tailwind CSS, shadcn/ui components
+- **Authentication**: Supabase Auth
+- **Database**: Supabase (PostgreSQL)
+- **Animations**: Framer Motion
+- **Icons**: Lucide React
+- **Routing**: React Router v6
+- **State Management**: React Context API
+- **Audio**: HTML5 Audio API
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 📁 Project Structure
 
-## What technologies are used for this project?
+```
+FM-App/
+├── public/              # Static assets
+├── src/
+│   ├── components/      # React components
+│   │   ├── ui/         # shadcn/ui components
+│   │   ├── AudioPlayer.tsx
+│   │   ├── AuthDialog.tsx
+│   │   ├── Header.tsx
+│   │   └── ...
+│   ├── contexts/       # React contexts
+│   │   ├── AuthContext.tsx
+│   │   └── PlayerContext.tsx
+│   ├── hooks/          # Custom React hooks
+│   ├── lib/            # Utilities and configs
+│   │   ├── supabase.ts
+│   │   └── utils.ts
+│   ├── pages/          # Page components
+│   │   ├── Index.tsx
+│   │   ├── Profile.tsx
+│   │   ├── Premium.tsx
+│   │   ├── Terms.tsx
+│   │   ├── Privacy.tsx
+│   │   └── ...
+│   ├── types/          # TypeScript types
+│   ├── App.tsx         # Main app component
+│   └── main.tsx        # Entry point
+├── .env.example        # Environment variables template
+├── vercel.json         # Vercel deployment config
+├── DEPLOYMENT.md       # Deployment guide
+└── package.json
+```
 
-This project is built with:
+## 🎨 Key Features Explained
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Authentication
+- Email/password sign up and sign in
+- Password reset functionality
+- Password strength indicator
+- Secure session management via Supabase
 
-## How can I deploy this project?
+### User Profile
+- Display name and full name
+- Phone number and location
+- Bio/about section
+- Avatar upload
+- Listening history and trends
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+### Audio Player
+- Play/pause controls
+- Volume control
+- Station metadata display
+- Smooth transitions between stations
+- Persistent player across pages
 
-## Can I connect a custom domain to my Lovable project?
+### Premium Features
+- 60-day free trial (no credit card required)
+- HD audio quality (320kbps)
+- Access to all global regions
+- Ad-free experience
+- Unlimited favorites
+- Priority support
 
-Yes, you can!
+## 🔧 Available Scripts
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+```bash
+# Development
+npm run dev          # Start dev server
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+# Production
+npm run build        # Build for production
+npm run preview      # Preview production build
+
+# Code Quality
+npm run lint         # Run ESLint
+npm run test         # Run tests
+npm run test:watch   # Run tests in watch mode
+```
+
+## 🚀 Deployment
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
+
+### Quick Deploy to Vercel
+
+1. Push code to GitHub
+2. Import project in Vercel
+3. Add environment variables
+4. Deploy!
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/som21-star/FM-App)
+
+## 🔐 Environment Variables
+
+Required environment variables:
+
+```env
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+**Important**: Never commit `.env` files to Git!
+
+## 📝 License
+
+This project is private and proprietary.
+
+## 🤝 Contributing
+
+This is a private project. If you have access and want to contribute:
+
+1. Create a feature branch
+2. Make your changes
+3. Test thoroughly
+4. Submit a pull request
+
+## 🐛 Known Issues
+
+- Some radio stations may have intermittent connectivity
+- Audio playback may not work on older browsers
+- Mobile Safari may require user interaction before audio plays
+
+## 📞 Support
+
+For issues or questions:
+- Email: support@frequencyhouse.com
+- Create an issue in this repository
+
+## 🎯 Roadmap
+
+- [ ] Add more radio stations
+- [ ] Implement offline mode (PWA)
+- [ ] Add social sharing features
+- [ ] Create mobile apps (iOS/Android)
+- [ ] Add podcast support
+- [ ] Implement sleep timer
+- [ ] Add equalizer controls
+- [ ] Multi-language support
+
+## 👏 Acknowledgments
+
+- Radio stations for providing streams
+- Supabase for backend infrastructure
+- shadcn/ui for beautiful components
+- Lovable.dev for initial scaffolding
+
+---
+
+Made with ❤️ by the Frequency House team

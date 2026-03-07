@@ -1,14 +1,15 @@
-import { Radio, Heart, Globe, Crown, Sun, Moon } from 'lucide-react';
+import { Radio, Heart, Globe, Crown, Sun, Moon, LogOut } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import AuthDialog from './AuthDialog';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
 
 export function Header() {
   const location = useLocation();
-  const { isPremium, user } = useAuth();
+  const { isPremium, user, signOut } = useAuth();
 
   const navItems = [
     { href: '/', label: 'Home', icon: Radio },
@@ -17,7 +18,7 @@ export function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-background/90 backdrop-blur-xl border-b border-border">
+    <header className="sticky top-0 z-40 bg-background backdrop-blur-xl border-b border-border">
       <div className="max-w-2xl mx-auto px-4">
         <div className="flex items-center justify-between h-14">
           {/* Logo */}
@@ -101,14 +102,27 @@ export function Header() {
 
             {/* Profile link when signed in */}
             {user ? (
-              <Link to="/profile" className="hidden sm:flex items-center gap-2 px-2 py-1 rounded-full hover:bg-secondary transition">
-                {user.user_metadata?.avatar_base64 || user.user_metadata?.avatar_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={user.user_metadata?.avatar_base64 || user.user_metadata?.avatar_url} alt={user.user_metadata?.display_name || user.email || 'profile'} className="w-8 h-8 rounded-full object-cover" />
-                ) : (
-                  <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-xs text-muted-foreground">{(user.user_metadata?.display_name || user.email || 'U').charAt(0).toUpperCase()}</div>
-                )}
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link to="/profile" className="flex items-center gap-2 px-2 py-1 rounded-full hover:bg-secondary transition">
+                  {user.user_metadata?.avatar_base64 || user.user_metadata?.avatar_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={user.user_metadata?.avatar_base64 || user.user_metadata?.avatar_url} alt={user.user_metadata?.display_name || user.email || 'profile'} className="w-8 h-8 rounded-full object-cover ring-2 ring-border" />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-xs font-medium text-muted-foreground ring-2 ring-border">{(user.user_metadata?.display_name || user.email || 'U').charAt(0).toUpperCase()}</div>
+                  )}
+                  <span className="hidden sm:inline text-sm font-medium text-foreground truncate max-w-[120px]">
+                    {user.user_metadata?.display_name || user.email?.split('@')[0] || 'User'}
+                  </span>
+                </Link>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={signOut}
+                  className="hidden sm:flex items-center gap-1 text-muted-foreground hover:text-red-600"
+                >
+                  <LogOut className="w-4 h-4" />
+                </Button>
+              </div>
             ) : null}
 
             <AuthDialog />

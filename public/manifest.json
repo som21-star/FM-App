@@ -1,21 +1,54 @@
 {
-  "name": "Frequency House",
+  "name": "Frequency House - Your Home of Radio",
   "short_name": "Frequency House",
-  "description": "Your Home of Radio — stream live stations from around the world",
+  "description": "Stream live radio stations from India, USA, Europe, Australia, South America, Africa, Asia Pacific & Middle East. 60-day free trial!",
   "start_url": "/",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#000000",
-  "theme_color": "#000000",
+  "theme_color": "#f97316",
+  "categories": ["music", "entertainment", "news"],
   "icons": [
     {
       "src": "/favicon.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/favicon.ico",
       "sizes": "64x64",
       "type": "image/x-icon"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/placeholder.svg",
+      "sizes": "540x720",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Favorites",
+      "short_name": "Favorites",
+      "description": "View your favorite stations",
+      "url": "/favorites",
+      "icons": [{ "src": "/favicon.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Premium",
+      "short_name": "Premium",
+      "description": "Upgrade to Premium",
+      "url": "/premium",
+      "icons": [{ "src": "/favicon.png", "sizes": "192x192" }]
     }
   ]
 }

@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { toast } from 'sonner';
 
 const freeFeatures = [
   'Basic waveforms only',
@@ -39,14 +40,35 @@ const plans = [
     cta: 'Current Plan',
   },
   {
-    id: 'premium_free',
-    name: 'Early Bird Premium',
+    id: 'premium_trial',
+    name: 'Pro (60-Day Free Trial)',
     price: 'Free',
     period: 'for 60 days',
-    annualEquiv: 'Limited time offer',
+    annualEquiv: 'Then $1/month or $12/year',
     popular: true,
-    savings: '100% OFF',
-    cta: 'Activate Free Access',
+    savings: '100% OFF for 60 days',
+    cta: 'Start Free Trial',
+  },
+  {
+    id: 'premium_monthly',
+    name: 'Pro Monthly',
+    price: '$1',
+    period: 'per month',
+    annualEquiv: 'Billed monthly',
+    popular: false,
+    cta: 'Choose Monthly',
+    comingSoon: true,
+  },
+  {
+    id: 'premium_annual',
+    name: 'Pro Annual',
+    price: '$12',
+    period: 'per year',
+    annualEquiv: 'Save $3 vs monthly',
+    popular: false,
+    savings: 'Best Value',
+    cta: 'Choose Annual',
+    comingSoon: true,
   }
 ];
 
@@ -67,7 +89,9 @@ export default function Premium() {
 
   const handleCheckout = async (planId: string) => {
     if (!user) {
-      alert("Please sign in to upgrade to Premium.");
+      toast.error('Please sign in first', {
+        description: 'You need to be signed in to upgrade to Premium'
+      });
       return;
     }
     setIsCheckingOut(true);
@@ -75,17 +99,44 @@ export default function Premium() {
     try {
       console.log(`Activating Free Premium for ${planId}...`);
 
-      const { error } = await supabase.auth.updateUser({
+      // Try to update user metadata in Supabase
+      const { data, error } = await supabase.auth.updateUser({
         data: { is_premium: true }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Supabase error:", error);
+        // Fallback: Store in localStorage
+        console.log("Using localStorage fallback...");
+        localStorage.setItem(`premium_${user.id}`, 'true');
+      } else {
+        console.log("Premium activated successfully:", data);
+      }
 
-      alert("Premium access activated! Enjoy full features for the next 60 days.");
-      window.location.reload();
-    } catch (err) {
+      toast.success('🎉 Premium activated!', {
+        description: 'Enjoy full features for the next 60 days'
+      });
+      
+      // Reload to apply changes
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1500);
+    } catch (err: any) {
       console.error("Activation error:", err);
-      alert("Failed to activate Premium. Please try again.");
+      // Still try localStorage fallback
+      try {
+        localStorage.setItem(`premium_${user.id}`, 'true');
+        toast.success('🎉 Premium activated!', {
+          description: 'Enjoy full features for the next 60 days'
+        });
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 1500);
+      } catch {
+        toast.error('Failed to activate Premium', {
+          description: err.message || 'Please try again later'
+        });
+      }
     } finally {
       setIsCheckingOut(false);
     }
@@ -135,6 +186,25 @@ export default function Premium() {
         {/* Gold divider */}
         <div className="gold-bar mb-8" />
 
+        {/* Pricing Info Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 p-4 rounded-xl bg-gradient-to-r from-primary/10 to-amber-500/10 border border-primary/20"
+        >
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <Crown className="w-4 h-4 text-primary" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-sm font-bold text-foreground mb-1">Launch Special Offer</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Start your <span className="font-semibold text-primary">60-day free trial</span> today! After the trial, continue with Pro for just <span className="font-semibold text-foreground">$1/month</span> or save with our annual plan at <span className="font-semibold text-foreground">$12-15/year</span>. No credit card required to start.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+
         {/* Pricing Cards */}
         <motion.section
           initial={{ opacity: 0, y: 16 }}
@@ -181,19 +251,25 @@ export default function Premium() {
                         {plan.savings}
                       </span>
                     )}
-                    <Button
-                      size="sm"
-                      variant={plan.popular ? 'default' : 'outline'}
-                      className={cn(
-                        "text-xs font-semibold",
-                        plan.popular && "glow-primary",
-                        plan.id === 'free' && "opacity-50 pointer-events-none"
-                      )}
-                      onClick={() => plan.id !== 'free' && handleCheckout(plan.id)}
-                      disabled={plan.id === 'free' || isCheckingOut}
-                    >
-                      {isCheckingOut ? 'Loading...' : plan.cta}
-                    </Button>
+                    {plan.comingSoon ? (
+                      <div className="text-[10px] text-muted-foreground font-medium">
+                        Available after trial
+                      </div>
+                    ) : (
+                      <Button
+                        size="sm"
+                        variant={plan.popular ? 'default' : 'outline'}
+                        className={cn(
+                          "text-xs font-semibold",
+                          plan.popular && "glow-primary",
+                          plan.id === 'free' && "opacity-50 pointer-events-none"
+                        )}
+                        onClick={() => plan.id !== 'free' && handleCheckout(plan.id)}
+                        disabled={plan.id === 'free' || isCheckingOut}
+                      >
+                        {isCheckingOut ? 'Loading...' : plan.cta}
+                      </Button>
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -201,7 +277,7 @@ export default function Premium() {
           </div>
 
           <p className="text-center text-[11px] text-muted-foreground mt-3">
-            ✓ Cancel anytime &nbsp;·&nbsp; ✓ Free for first 60 days &nbsp;·&nbsp; ✓ No card required
+            ✓ 60 days free trial &nbsp;·&nbsp; ✓ Then $1/month or $12/year &nbsp;·&nbsp; ✓ Cancel anytime
           </p>
         </motion.section>
 
@@ -326,16 +402,16 @@ export default function Premium() {
             <div className="h-0.5 bg-gradient-primary" />
             <div className="p-5 text-center">
               <Crown className="w-8 h-8 text-primary mx-auto mb-2" />
-              <h3 className="font-display text-base font-bold text-foreground mb-1">Upgrade to Premium</h3>
-              <p className="text-xs text-muted-foreground mb-4">Enjoy full premium access during our infrastructure launch phase.</p>
+              <h3 className="font-display text-base font-bold text-foreground mb-1">Start Your Free Trial</h3>
+              <p className="text-xs text-muted-foreground mb-4">Get 60 days of Pro features absolutely free. After trial: $1/month or $12/year.</p>
               <Button
                 className="w-full glow-primary font-semibold"
-                onClick={() => handleCheckout('premium_free')}
+                onClick={() => handleCheckout('premium_trial')}
                 disabled={isCheckingOut}
               >
-                {isCheckingOut ? 'Activating...' : 'Get Free Premium Access'}
+                {isCheckingOut ? 'Activating...' : 'Start 60-Day Free Trial'}
               </Button>
-              <p className="text-[10px] text-muted-foreground mt-2.5">Limited time offer: Free for first 60 days</p>
+              <p className="text-[10px] text-muted-foreground mt-2.5">No credit card required • Cancel anytime</p>
             </div>
           </div>
         </motion.div>

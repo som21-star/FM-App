@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
+import { toast } from 'sonner';
 
 interface AuthContextType {
     session: Session | null;
@@ -36,10 +37,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }, []);
 
     const signOut = async () => {
-        await supabase.auth.signOut();
+        try {
+            // Clear premium status from localStorage
+            if (session?.user?.id) {
+                localStorage.removeItem(`premium_${session.user.id}`);
+            }
+            await supabase.auth.signOut();
+            toast.success('Signed out successfully', {
+                description: 'See you next time!'
+            });
+            // Redirect to home after sign out
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 500);
+        } catch (error) {
+            console.error('Sign out error:', error);
+            toast.error('Failed to sign out', {
+                description: 'Please try again'
+            });
+        }
     };
 
-    const isPremium = session?.user?.user_metadata?.is_premium === true;
+    // Check premium status from user_metadata OR localStorage fallback
+    const isPremium = 
+        session?.user?.user_metadata?.is_premium === true || 
+        (session?.user?.id && localStorage.getItem(`premium_${session.user.id}`) === 'true');
 
     return (
         <AuthContext.Provider value={{ session, user: session?.user ?? null, loading, isPremium, signOut }}>
