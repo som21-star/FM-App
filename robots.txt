@@ -1,0 +1,10 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow admin/private pages
+Disallow: /profile
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://frequencyhouse.com/sitemap.xml
