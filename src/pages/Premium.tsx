@@ -297,7 +297,7 @@ export default function Premium() {
             </div>
 
             {[
-              { label: "Editor's Pick", free: 'Limited', premium: 'Available' },
+              { label: "Editor's Pick section availability", free: 'Limited', premium: 'Available' },
               { label: 'Audio', free: 'Standard', premium: 'HD 320kbps' },
               { label: 'Ads', free: 'Yes', premium: 'None' },
               { label: 'Favourites', free: '5 max', premium: 'Unlimited' },
