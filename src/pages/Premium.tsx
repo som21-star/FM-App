@@ -75,7 +75,7 @@ const regions = [
   { emoji: '🇮🇳', name: 'India', stations: 'Radio Mirchi, Red FM, AIR', locked: false },
   { emoji: '🇺🇸', name: 'USA', stations: 'iHeart, NPR, ESPN Radio', locked: false },
   { emoji: '🇬🇧', name: 'Europe', stations: 'BBC Radio, RTL, Capital FM', locked: false },
-  { emoji: '🇦🇺', name: 'Australia', stations: 'Triple J, Nova, ABC Radio', locked: true },
+  { emoji: '🇦🇺', name: 'Australia', stations: 'Triple J, Nova, ABC Radio', locked: false },
   { emoji: '🇧🇷', name: 'South America', stations: 'Rádio Gaúcha, Caracol', locked: true },
   { emoji: '🌍', name: 'Africa', stations: 'Metro FM, Kaya FM', locked: true },
   { emoji: '🇯🇵', name: 'Asia Pacific', stations: 'J-Wave, KBS, Radio Taiwan', locked: true },
@@ -297,7 +297,7 @@ export default function Premium() {
             </div>
 
             {[
-              { label: "Editor's Pick Access", free: 'Limited', premium: 'Available' },
+              { label: "Editor's Pick Access", free: 'Limited', premium: 'Available · Australia included' },
               { label: 'Audio', free: 'Standard', premium: 'HD 320kbps' },
               { label: 'Ads', free: 'Yes', premium: 'None' },
               { label: 'Favourites', free: '5 max', premium: 'Unlimited' },

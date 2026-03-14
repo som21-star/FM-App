@@ -18,6 +18,9 @@ const Index = () => {
   const { play, currentStation, isPlaying } = usePlayer();
   const { isPremium } = useAuth();
 
+
+
+
   // Station icons mapping
   const stationIcons: Record<string, any> = {
     'kexp': Radio,
@@ -339,9 +342,6 @@ const Index = () => {
             </button>
           )}
         </motion.section>
-
-        {/* Divider */}
-        <div className="gold-bar my-8" />
 
         {/* Ad Banner - Only for Free Users */}
         {!isPremium && (
