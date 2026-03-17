@@ -297,7 +297,7 @@ export default function Premium() {
             </div>
 
             {[
-              { label: "Editor's Pick Access", free: 'Limited', premium: 'Available · Australia included' },
+              { label: "Regions & Editor's Picks", free: 'Limited Regions', premium: 'World + Australia + Editor\'s Picks' },
               { label: 'Audio', free: 'Standard', premium: 'HD 320kbps' },
               { label: 'Ads', free: 'Yes', premium: 'None' },
               { label: 'Favourites', free: '5 max', premium: 'Unlimited' },
