@@ -102,8 +102,6 @@
     min-height: 100vh;
     /* iOS momentum / inertia scrolling */
     -webkit-overflow-scrolling: touch;
-    /* Prevent scroll chaining on Android */
-    overscroll-behavior-y: contain;
   }
 
   body {
@@ -117,7 +115,6 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
   }
 
   h1,
@@ -224,7 +221,6 @@
   /* Touch-friendly horizontal scroll */
   .touch-scroll-x {
     -webkit-overflow-scrolling: touch;
-    touch-action: pan-x;
     overscroll-behavior-x: contain;
   }
 
