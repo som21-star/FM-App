@@ -237,8 +237,10 @@ export function FrequencyWaveBackground() {
       style={{ 
         zIndex: 0, 
         opacity: 1,
+        top: 0,
+        left: 0,
         display: 'block',
-        maxHeight: '100vh',
+        maxHeight: 'auto',
         overflow: 'hidden'
       }}
       aria-hidden

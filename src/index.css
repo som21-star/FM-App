@@ -95,35 +95,25 @@
   }
 
   html,
-  body,
-  #root {
-    height: 100%;
-    width: 100%;
+  body {
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
+    width: 100%;
+    min-height: 100vh;
   }
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', sans-serif;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    overflow: hidden;
+    overflow-x: hidden;
   }
 
   #root {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
   }
 
   h1,

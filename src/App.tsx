@@ -23,26 +23,28 @@ const App = () => (
       <TooltipProvider>
         <PlayerProvider>
           <FrequencyWaveBackground />
-          <Toaster />
-          <Sonner />
-          <HashRouter
-            future={{
-              v7_startTransition: true,
-              v7_relativeSplatPath: true,
-            }}
-          >
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/favorites" element={<Favorites />} />
-              <Route path="/regions" element={<Regions />} />
-              <Route path="/premium" element={<Premium />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="/privacy" element={<Privacy />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </HashRouter>
+          <div className="relative z-10 flex flex-col min-h-screen">
+            <Toaster />
+            <Sonner />
+            <HashRouter
+              future={{
+                v7_startTransition: true,
+                v7_relativeSplatPath: true,
+              }}
+            >
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/favorites" element={<Favorites />} />
+                <Route path="/regions" element={<Regions />} />
+                <Route path="/premium" element={<Premium />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/privacy" element={<Privacy />} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </HashRouter>
+          </div>
         </PlayerProvider>
       </TooltipProvider>
     </AuthProvider>
