@@ -23,12 +23,12 @@ export function AudioPlayer() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: 'spring', bounce: 0.15, duration: 0.5 }}
-          className="fixed bottom-0 left-0 right-0 z-50"
+          className="fixed player-bottom-position left-0 right-0 z-50"
         >
           {/* Gold accent top line */}
           <div className="gold-bar w-full" />
 
-          <div className="bg-card/98 backdrop-blur-2xl border-t border-border/60">
+          <div className="bg-card/98 backdrop-blur-2xl border-t border-border/60 sm:pb-[env(safe-area-inset-bottom,0px)]">
             {/* Waveform bars strip */}
             {isPlaying && (
               <div className="flex items-end gap-0.5 h-5 px-4 pt-1.5 overflow-hidden">

@@ -100,12 +100,15 @@
     padding: 0;
     width: 100%;
     min-height: 100vh;
+    /* iOS momentum / inertia scrolling */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent scroll chaining on Android */
+    overscroll-behavior-y: contain;
   }
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', sans-serif;
-    overflow-x: hidden;
   }
 
   #root {
@@ -114,6 +117,7 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
   }
 
   h1,
@@ -215,5 +219,36 @@
 
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Touch-friendly horizontal scroll */
+  .touch-scroll-x {
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
+    overscroll-behavior-x: contain;
+  }
+
+  /*
+   * Bottom padding that clears both the fixed audio player (7rem / 112px)
+   * AND the iOS Home indicator via env(safe-area-inset-bottom).
+   * Pages use this instead of bare pb-28 so nothing hides behind the player.
+   */
+  .pb-safe-player {
+    padding-bottom: calc(7rem + 4rem + env(safe-area-inset-bottom, 0px));
+  }
+  @media (min-width: 640px) {
+    .pb-safe-player {
+      padding-bottom: calc(7rem + env(safe-area-inset-bottom, 0px));
+    }
+  }
+
+  /* Audio player position above bottom nav */
+  .player-bottom-position {
+    bottom: calc(4rem + env(safe-area-inset-bottom, 0px));
+  }
+  @media (min-width: 640px) {
+    .player-bottom-position {
+      bottom: 0;
+    }
   }
 }

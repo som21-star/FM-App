@@ -19,8 +19,8 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 bg-background backdrop-blur-xl border-b border-border">
-      <div className="max-w-2xl mx-auto px-4 overflow-x-auto scrollbar-hide">
-        <div className="flex items-center justify-between h-14 min-w-max gap-4">
+      <div className="max-w-2xl mx-auto px-4">
+        <div className="flex items-center justify-between h-14">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5">
             <div className="relative">
@@ -42,7 +42,7 @@ export function Header() {
           </Link>
 
           {/* Navigation */}
-          <nav className="flex items-center gap-2">
+          <nav className="hidden sm:flex items-center gap-2">
             {navItems.map((item) => {
               const isActive = location.pathname === item.href;
               const Icon = item.icon;

@@ -9,6 +9,7 @@ import { FrequencyWaveBackground } from "@/components/FrequencyWaveBackground";
 import Index from "./pages/Index";
 import Favorites from "./pages/Favorites";
 import Regions from "./pages/Regions";
+import { BottomNav } from "@/components/BottomNav";
 import Premium from "./pages/Premium";
 import Profile from "./pages/Profile";
 import Terms from "./pages/Terms";
@@ -43,6 +44,7 @@ const App = () => (
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
+              <BottomNav />
             </HashRouter>
           </div>
         </PlayerProvider>
