@@ -22,7 +22,7 @@ export function Header() {
       <div className="max-w-2xl mx-auto px-4">
         <div className="flex items-center justify-between h-14">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2.5">
+          <Link to="/" className="flex items-center gap-2.5 shrink-0">
             <div className="relative">
               <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
                 <Radio className="w-4 h-4 text-primary-foreground" />
@@ -37,7 +37,7 @@ export function Header() {
               <div className="flex items-baseline gap-1">
                 <span className="font-display font-bold text-base text-foreground tracking-tight">Hertz</span>
               </div>
-              <div className="text-[11px] text-muted-foreground -mt-0.5">Your Home of Radio</div>
+              <div className="text-[11px] text-muted-foreground -mt-0.5 whitespace-nowrap">Your Home of Radio</div>
             </div>
           </Link>
 

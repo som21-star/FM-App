@@ -207,13 +207,13 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-28">
+    <div className="min-h-screen bg-transparent pb-safe-player">
       <Header />
 
       {/* Hero */}
-      <section className="relative bg-grid-texture">
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/60 to-background pointer-events-none" />
+      <section className="relative">
+        {/* Gradient overlay to slightly dim the top for text readability but preserve 3D effect */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/10 to-transparent pointer-events-none" />
 
         <div className="relative max-w-2xl mx-auto px-4 pt-10 pb-8">
           <motion.div
